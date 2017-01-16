@@ -25,7 +25,7 @@ http.createServer(function (req, res) {
         res.writeHead(200, {'Content-Type': 'text/html'});
         fs.createReadStream(dir + '/mosaic.html').pipe(res);
         return;
-    } else if (m = pathname.match(/^\/js\//) || pathname.match(/^\/dist\/js\//)) {
+    } else if (m = pathname.match(/^\/js\//) || pathname.match(/^\/dist\/scripts\//)) {
         var filename = dir + pathname;
         var stats = fs.existsSync(filename) && fs.statSync(filename);
         if (stats && stats.isFile()) {
@@ -44,7 +44,7 @@ http.createServer(function (req, res) {
         }
     } else if (m = pathname.match(/^\/color\/([0-9a-fA-F]{6})/)) {
         res.writeHead(200, {'Content-Type': 'image/svg+xml'});
-        res.write(util.format(svgTemplate, mosaic.TILE_WIDTH, mosaic.TILE_HEIGHT, m[1]));
+        res.write(util.format(svgTemplate, mosaic.values().TILE_WIDTH, mosaic.values().TILE_HEIGHT, m[1]));
         res.end();
         return;
     }

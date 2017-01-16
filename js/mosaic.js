@@ -1,10 +1,9 @@
 // Constants shared between client and server.
+var TILE_WIDTH = 5,
+  TILE_HEIGHT = 5;
 
-var TILE_WIDTH =12;
-var TILE_HEIGHT = 12;
-
-var exports = exports || null;
-if (exports) {
-    exports.TILE_WIDTH = TILE_WIDTH;
-    exports.TILE_HEIGHT = TILE_HEIGHT;
-}
+(function(exports) {
+  exports.values = function() {
+    return {TILE_WIDTH: TILE_WIDTH, TILE_HEIGHT: TILE_HEIGHT};
+  };
+}(typeof exports === 'undefined' ? this.tiles = {} : exports));
