@@ -1,6 +1,9 @@
 /**
  * Created by Valerio Bartolini
  */
+
+'use strict';
+
 var gulp = require('gulp'),
   gutil = require('gulp-util'),
   path = require('path'),
