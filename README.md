@@ -8,7 +8,7 @@ The default size is 7x7.
 
 
 ## INSTALLATION
-* npm install for development (npm install gulp if needed)
+* npm install for development (npm install -g gulp-cli if needed)
 * gulp build
 * digit npm start on the root of the project
 * check the app on http://localhost:3000

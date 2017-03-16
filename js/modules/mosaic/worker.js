@@ -7,11 +7,6 @@
 
 /**
  *
- * @type {Array}
- */
-var tileRows = [];
-/**
- *
  * @param e
  */
 self.onmessage = function(e) {
@@ -31,10 +26,11 @@ self.onmessage = function(e) {
 /**
  *
  * @param data
- * @returns {{data: string, type}}
+ * @returns {{data: Array, type: string}}
  */
 function elaboration(data) {
   var dataPixels = [],
+    tileRows = [],
     heightTile = data.TILE_HEIGHT,
     widthTile = data.TILE_WIDTH,
     numRow = data.rowNum,
@@ -57,17 +53,9 @@ function elaboration(data) {
       tileRows[row].push({color: tile.color});
     }
   }
-  return {data: '', type: 'MSG_COMPOSE_READY'};
+  return {data: tileRows, type: 'MSG_COMPOSE_READY'};
 }
-/**
- *
- * @returns {*}
- */
-function sendRow() {
-  var tileRow = tileRows[0];
-  tileRows.shift();
-  return tileRows.length ? {data: tileRow, type: 'MSG_ROW_READY'} : false;
-}
+
 /**
  *
  * @returns {{data: string, type: string}}
@@ -79,11 +67,10 @@ function stop() {
 
 /**
  *
- * @type {{MSG_START: elaboration, MSG_SEND_ROW: sendRow, MSG_STOP: stop}}
+ * @type {{MSG_START: elaboration, MSG_SEND_ROW: MSG_STOP: stop}}
  */
 var op = {
   MSG_START: elaboration,
-  MSG_SEND_ROW: sendRow,
   MSG_STOP: stop
 };
 

@@ -33,6 +33,7 @@ export default class MosaicRow {
    * @returns {MosaicRow}
    */
   preload(tiles, URL_SERVER) {
+    var c =[];
     for (let i = 0; i < tiles.length; i++) {
       this.row[i] = new Promise(function(resolve) {
         var img = new Image();

@@ -10,8 +10,8 @@ class App {
      * @param img
      */
     function start(img) {
-      var photo = new Photo(img);
-      photo.checkImage(options) && new Mosaic(options).create(photo).convert();
+      let photo = new Photo(img);
+      photo.checkImage(options) && new Mosaic(options).create(photo);
     }
 
     /**
@@ -20,16 +20,16 @@ class App {
      * @private
      */
     function loadFile(file) {
-      var reader = new FileReader();
+      let reader = new FileReader();
       file && reader.addEventListener('load', function(e) {
-        var imgTemplate = new Image();
+        let imgTemplate = new Image();
         imgTemplate.src = e.target.result;
         imgTemplate.onload = start(imgTemplate);
       }, false);
       reader.readAsDataURL(file);
     }
 
-    var areaDrag = document.querySelector('.drag-area'),
+    let areaDrag = document.querySelector('.drag-area'),
       input = document.querySelector('#input'),
       inputHide = document.querySelector('#inputHide');
 

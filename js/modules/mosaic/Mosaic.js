@@ -7,6 +7,7 @@ export default class Mosaic {
   constructor(options) {
     this.width = 0;
     this.height = 0;
+    this.area = null;
     this.context = '';
     this.dataCtx = [];
     this.indexRow = 0;
@@ -26,7 +27,9 @@ export default class Mosaic {
   create(img) {
     var $node = document.querySelector('#mosaic-box'),
       width = $node.offsetWidth,
-      ratio = img.height / img.width;
+      ratio = img.height / img.width,
+      self = this,
+      w = new Worker('js/modules/mosaic/worker.js');
 
     // photo width > window width => resize image
     if (img.width > width) {
@@ -45,30 +48,14 @@ export default class Mosaic {
     this.dataCtx = this.context.getImageData(0, 0, this.width, this.height).data;
     this.context.clearRect(0, 0, this.width, this.height);
 
-    return this;
-  }
-
-  convert() {
-    var self = this,
-      w = new Worker('js/modules/mosaic/worker.js'),
-      postData = {
-        colNum: Math.floor(this.width / this.TILE_WIDTH),
-        rowNum: Math.floor(this.height / this.TILE_HEIGHT),
-        pixelNum: this.TILE_HEIGHT * this.width * 4,
-        dataCtx: this.dataCtx,
-        TILE_HEIGHT: this.TILE_HEIGHT,
-        TILE_WIDTH: this.TILE_WIDTH
+    var postData = {
+      colNum: Math.floor(this.width / this.TILE_WIDTH),
+      rowNum: Math.floor(this.height / this.TILE_HEIGHT),
+      pixelNum: this.TILE_HEIGHT * this.width * 4,
+      dataCtx: this.dataCtx,
+      TILE_HEIGHT: this.TILE_HEIGHT,
+      TILE_WIDTH: this.TILE_WIDTH
       };
-
-    /**
-     *
-     * @returns {{data: string, type: string}}
-     */
-    function msgSendRow() {
-      return {
-        data: '', type: 'MSG_SEND_ROW'
-      };
-    }
 
     /**
      *
@@ -91,10 +78,8 @@ export default class Mosaic {
           this.postMessage(msgCloseWorker());
           break;
         case 'MSG_COMPOSE_READY': // It's called when the mosaic process is completed
-          this.postMessage(msgSendRow());
-          break;
-        case 'MSG_ROW_READY': // It's called until the last row is drawn
-          render();
+          self.area = data;
+          addRow();
           break;
         default:
           break;
@@ -106,16 +91,20 @@ export default class Mosaic {
       function render() {
         var mosaicRow = new MosaicRow();
         mosaicRow
-          .setDimension(data.length * self.TILE_WIDTH, self.TILE_HEIGHT)
-          .preload(data, self.URL_SERVER);
+          .setDimension(self.width, self.TILE_HEIGHT)
+          .preload(self.area[self.indexRow], self.URL_SERVER);
         Promise.all(mosaicRow.row)
           .then(function(tilesLoaded) {
+            addRow();
             self.draw(mosaicRow.draw(tilesLoaded, self.TILE_WIDTH).canvas);
-            w.postMessage(msgSendRow());
           })
           .catch(function(err) {
             console.log(err);
           });
+      }
+
+      function addRow() {
+        render();
       }
     };
     w.onerror = function(err) {
