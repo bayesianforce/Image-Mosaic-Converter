@@ -33,7 +33,6 @@ export default class MosaicRow {
    * @returns {MosaicRow}
    */
   preload(tiles, URL_SERVER) {
-    var c =[];
     for (let i = 0; i < tiles.length; i++) {
       this.row[i] = new Promise(function(resolve) {
         var img = new Image();
@@ -54,9 +53,8 @@ export default class MosaicRow {
    */
   draw(tiles, TILE_WIDTH) {
     for (let i = 0; i < tiles.length; i++) {
-      var x = i * TILE_WIDTH;
-      this.context.drawImage(tiles[i], x, 0);
+      this.context.drawImage(tiles[i], i * TILE_WIDTH, 0);
     }
-    return this;
+    return this.canvas;
   }
 }

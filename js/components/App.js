@@ -1,17 +1,22 @@
 /**
  * Created by Valerio Bartolini
  */
-import Mosaic from './modules/mosaic/Mosaic';
-import Photo from './modules/photo/Photo';
-class App {
+import Mosaic from './mosaic/Mosaic';
+import Photo from './photo/Photo';
+
+export default class App {
   constructor(options) {
     /**
      *
      * @param img
      */
     function start(img) {
-      let photo = new Photo(img);
-      photo.checkImage(options) && new Mosaic(options).create(photo);
+      let photo = new Photo().create(img),
+        res = photo.checkImage(options) && new Mosaic(options).create(photo);
+
+      if (res === false) {
+        console.log('wrong img dimension. width:' + img.width + ' and height: ' + img.height);
+      }
     }
 
     /**
@@ -24,7 +29,9 @@ class App {
       file && reader.addEventListener('load', function(e) {
         let imgTemplate = new Image();
         imgTemplate.src = e.target.result;
-        imgTemplate.onload = start(imgTemplate);
+        imgTemplate.onload = function() {
+          start(imgTemplate);
+        };
       }, false);
       reader.readAsDataURL(file);
     }
@@ -54,4 +61,3 @@ class App {
     }, false);
   }
 }
-module.exports = App;

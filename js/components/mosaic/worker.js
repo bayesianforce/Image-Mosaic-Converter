@@ -136,7 +136,7 @@ class Tile {
       }
 
       return tileSum.map(function(avgComponent) {
-        return Math.ceil(avgComponent / numPixels) | 0;
+        return avgComponent / numPixels | 0;
       });
     }
 

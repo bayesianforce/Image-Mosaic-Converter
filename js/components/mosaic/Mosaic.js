@@ -22,14 +22,14 @@ export default class Mosaic {
   /**
    *
    * @param img
-   * @returns {Mosaic}
    */
   create(img) {
+    console.log('start mosaic');
     var $node = document.querySelector('#mosaic-box'),
       width = $node.offsetWidth,
       ratio = img.height / img.width,
       self = this,
-      w = new Worker('js/modules/mosaic/worker.js');
+      w = new Worker('js/components/mosaic/worker.js');
 
     // photo width > window width => resize image
     if (img.width > width) {
@@ -48,15 +48,6 @@ export default class Mosaic {
     this.dataCtx = this.context.getImageData(0, 0, this.width, this.height).data;
     this.context.clearRect(0, 0, this.width, this.height);
 
-    var postData = {
-      colNum: Math.floor(this.width / this.TILE_WIDTH),
-      rowNum: Math.floor(this.height / this.TILE_HEIGHT),
-      pixelNum: this.TILE_HEIGHT * this.width * 4,
-      dataCtx: this.dataCtx,
-      TILE_HEIGHT: this.TILE_HEIGHT,
-      TILE_WIDTH: this.TILE_WIDTH
-      };
-
     /**
      *
      * @returns {{data: string, type: string}}
@@ -67,7 +58,17 @@ export default class Mosaic {
       };
     }
 
-    w.postMessage({data: postData, type: 'MSG_START'});
+    w.postMessage({
+      data: {
+        colNum: Math.floor(this.width / this.TILE_WIDTH),
+        rowNum: Math.floor(this.height / this.TILE_HEIGHT),
+        pixelNum: this.TILE_HEIGHT * this.width * 4,
+        dataCtx: this.dataCtx,
+        TILE_HEIGHT: this.TILE_HEIGHT,
+        TILE_WIDTH: this.TILE_WIDTH
+      },
+      type: 'MSG_START'
+    });
     w.onmessage = function(e) {
       var eData = e.data,
         data = eData.data,
@@ -79,7 +80,7 @@ export default class Mosaic {
           break;
         case 'MSG_COMPOSE_READY': // It's called when the mosaic process is completed
           self.area = data;
-          addRow();
+          render();
           break;
         default:
           break;
@@ -89,22 +90,24 @@ export default class Mosaic {
        *  draw single tiles, put them in a hidden row and draw the result
        */
       function render() {
-        var mosaicRow = new MosaicRow();
-        mosaicRow
-          .setDimension(self.width, self.TILE_HEIGHT)
-          .preload(self.area[self.indexRow], self.URL_SERVER);
-        Promise.all(mosaicRow.row)
+        let row = new MosaicRow();
+        row.setDimension(self.width, self.TILE_HEIGHT);
+
+        row.preload(self.area[self.indexRow], self.URL_SERVER);
+        Promise.all(row.row)
           .then(function(tilesLoaded) {
-            addRow();
-            self.draw(mosaicRow.draw(tilesLoaded, self.TILE_WIDTH).canvas);
+            console.time('draw');
+            let row1 = row.draw(tilesLoaded, self.TILE_WIDTH);
+            console.timeEnd('draw');
+
+            self.draw(row1);
+            row.context.clearRect(0, 0, self.width, self.TILE_HEIGHT);
+            row = null;
+            render();
           })
           .catch(function(err) {
             console.log(err);
           });
-      }
-
-      function addRow() {
-        render();
       }
     };
     w.onerror = function(err) {

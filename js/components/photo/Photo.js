@@ -3,10 +3,17 @@
  */
 
 export default class Photo {
-  constructor(img) {
+  constructor() {
+    this.data;
+    this.width;
+    this.height;
+  }
+
+  create(img) {
     this.data = img;
     this.width = img.width;
     this.height = img.height;
+    return this;
   }
 
   /**

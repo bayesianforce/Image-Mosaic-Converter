@@ -1,6 +1,9 @@
 /**
  * Created by Valerio Bartolini
  */
+import App from './components/App.js';
+import './App.css';
+
 const options = {
   tile: {WIDTH: tiles.values().TILE_WIDTH, HEIGHT: tiles.values().TILE_HEIGHT},
   path: {
@@ -9,5 +12,5 @@ const options = {
 };
 
 window.onload = function() {
-  new Mosaic.App(options);
+  new App(options);
 };
