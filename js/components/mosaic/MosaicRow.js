@@ -7,54 +7,41 @@
  * @constructor
  */
 export default class MosaicRow {
-  constructor() {
+  constructor(width, height, URL_SERVER) {
     this.row = [];
     this.canvas = document.createElement('canvas');
     this.context = this.canvas.getContext('2d');
-  }
-
-  /**
-   * set box canvas with image dimensions
-   * @param width
-   * @param height
-   * @returns {MosaicRow}
-   */
-
-  setDimension(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
-
-    return this;
+    this.url = URL_SERVER;
   }
 
   /**
    * loading images src and get svg from server
    * @param tiles
-   * @returns {MosaicRow}
    */
-  preload(tiles, URL_SERVER) {
+  fetch(tiles) {
     for (let i = 0; i < tiles.length; i++) {
-      this.row[i] = new Promise(function(resolve) {
-        var img = new Image();
-        img.onload = function() {
-          resolve(img);
+      this.row[i] = new Promise((resolve) => {
+        let img = new Image();
+        img.onload = (e) => {
+          resolve(e.target);
         };
-        img.src = URL_SERVER + tiles[i].color;
+        img.src = this.url + tiles[i].color;
       });
     }
-    return this;
   }
 
   /**
    * drawing images loaded during the preload phase
    * @param tiles
    * @param TILE_WIDTH
-   * @returns {MosaicRow}
    */
   draw(tiles, TILE_WIDTH) {
     for (let i = 0; i < tiles.length; i++) {
-      this.context.drawImage(tiles[i], i * TILE_WIDTH, 0);
+      let dx = i * TILE_WIDTH;
+      this.context.drawImage(tiles[i], dx, 0);
+      tiles[i].src = '';
     }
-    return this.canvas;
   }
 }
