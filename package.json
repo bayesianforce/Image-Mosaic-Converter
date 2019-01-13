@@ -3,7 +3,7 @@
   "name": "photomosaic",
   "version": "1.0.0",
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "bundle": "webpack --config webpack.config.js"
   },
   "devDependencies": {
