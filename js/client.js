@@ -7,7 +7,7 @@ import './App.css';
 const options = {
   tile: {WIDTH: tiles.values().TILE_WIDTH, HEIGHT: tiles.values().TILE_HEIGHT},
   path: {
-    SERVER: 'http://localhost:3000/color/'
+    SERVER: 'https://photomosaicool.herokuapp.com/color/'
   }
 };
 
