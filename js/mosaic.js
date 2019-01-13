@@ -1,6 +1,6 @@
 // Constants shared between client and server.
-var TILE_WIDTH = 10,
-  TILE_HEIGHT = 10;
+var TILE_WIDTH = 14,
+  TILE_HEIGHT = 14;
 
 (function(exports) {
   exports.values = function() {
