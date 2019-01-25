@@ -1,5 +1,3 @@
-'use strict';
-
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -7,12 +5,12 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   devtool: 'source-map',
   entry: {
-    App: __dirname + '/js/client.js',
+    App: __dirname + '/js/client.js'
   },
   externals: [],
   output: {
     path: __dirname + '/dist/scripts',
-    filename: 'PhotoMosaic.min.js',
+    filename: 'PhotoMosaic.min.js'
   },
   module: {
     rules: [
@@ -20,7 +18,7 @@ module.exports = {
         enforce: 'pre',
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'eslint-loader',
+        loader: 'eslint-loader'
       },
       {
         test: /\.js$/,
