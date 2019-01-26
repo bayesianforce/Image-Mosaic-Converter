@@ -35,5 +35,5 @@ module.exports = {
         ],
     },
     plugins: [],
-    watch: true,
+    watch: false,
 };

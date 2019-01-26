@@ -1,5 +1,5 @@
 {
-    "TILE_WIDTH": 5,
-    "TILE_HEIGHT": 5,
-    "IMAGE_PATH": "https://photomosaicool.herokuapp.com/color/"
+    "TILE_WIDTH": 10,
+    "TILE_HEIGHT": 10,
+    "IMAGE_PATH": "https://localhost/color/"
 }

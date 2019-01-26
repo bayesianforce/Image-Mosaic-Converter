@@ -6,11 +6,12 @@
     "scripts": {
         "build": "webpack --config webpack.config.js",
         "server": "node server.js",
-        "dev": "concurrently \"yarn server\" \"yarn bundle\"",
+        "dev": "concurrently \"yarn server\" \"yarn build --watch\"",
         "lint": "eslint . --cache",
         "typecheck": "flow check",
         "prettier": "prettier --check js/**/*.js",
-        "test": "yarn typecheck && yarn lint && yarn prettier"
+        "test": "yarn typecheck && yarn lint && yarn prettier",
+        "start": "yarn build && yarn server"
     },
     "devDependencies": {
         "@babel/cli": "^7.2.3",
@@ -19,6 +20,7 @@
         "@babel/preset-flow": "^7.0.0",
         "babel-eslint": "^10.0.1",
         "babel-loader": "^8.0.5",
+        "concurrently": "^4.1.0",
         "css-loader": "^2.1.0",
         "eslint": "^5.12.1",
         "eslint-config-airbnb-base": "^13.1.0",
