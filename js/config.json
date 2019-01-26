@@ -1,5 +1,5 @@
 {
     "TILE_WIDTH": 10,
     "TILE_HEIGHT": 10,
-    "IMAGE_PATH": "http://localhost/color/"
+    "IMAGE_PATH": "http://localhost:3000/color/"
 }

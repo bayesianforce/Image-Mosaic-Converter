@@ -7,7 +7,7 @@
 
 <p>Simple filter to convert an Image in Mosaic using a dedicated worker to process high computational calculations.</p>
 
-[**More about Web Workesr**](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
+[**More about Web Workers**](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
 
 </div>
 
