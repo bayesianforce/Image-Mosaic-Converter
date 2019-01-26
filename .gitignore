@@ -1,3 +1,6 @@
 .idea
+.vscode
+.eslintcache
+*.log
 dist/
 node_modules/

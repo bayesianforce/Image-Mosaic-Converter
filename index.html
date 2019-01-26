@@ -1,34 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
-    <link rel="icon" href="data:,">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <link rel="icon" href="data:," />
 
-    <title>Mosaic</title>
-</head>
+        <title>PhotoMosaic</title>
+    </head>
 
-<body>
-<section class="container">
-
-    <section class="toolbar">
-        <div class="drag-area">
-            <label>Drag files here</label>
+    <body>
+        <section class="container">
+            <section class="toolbar">
                 <div id="input" class="button">
                     <label>Browse..</label>
-                    <input id="inputHide" type="file" style="display:none"/>
+                    <input id="inputHide" type="file" style="display:none" />
                 </div>
-        </div>
-    </section>
+            </section>
 
-    <section id="mosaic-box" class="mosaic-box">
-        <canvas id="mosaic-area"></canvas>
-    </section>
-</section>
+            <section id="mosaic-box" class="mosaic-box">
+                <canvas id="mosaic-area"></canvas>
+            </section>
+        </section>
 
-<script type="text/javascript" src="js/mosaic.js"></script>
-<script type="text/javascript" src="dist/scripts/PhotoMosaic.min.js"></script>
-<script type="text/javascript" src="js/client.js"></script>
-</body>
+        <script type="text/javascript" src="dist/scripts/PhotoMosaic.min.js"></script>
+    </body>
 </html>

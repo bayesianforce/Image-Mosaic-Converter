@@ -1,14 +1,10 @@
-/**
- * Created by Valerio Bartolini
- */
+// @flow
 import MosaicRow from './MosaicRow';
+import * as config from '../../config.json';
 
 export default class Mosaic {
-    constructor(options) {
+    constructor() {
         this.data = null;
-        this.URL_SERVER = options.path.SERVER;
-        this.TILE_WIDTH = options.tile.WIDTH;
-        this.TILE_HEIGHT = options.tile.HEIGHT;
         this.width = 0;
         this.height = 0;
         this.numRow = 0;
@@ -19,17 +15,14 @@ export default class Mosaic {
         this.dataCtx = [];
     }
 
-    /**
-     *
-     * @param img
-     */
-    create(img) {
-        let $node = document.querySelector('#mosaic-box'),
-            width = $node.offsetWidth,
-            ratio = img.height / img.width,
-            w = new Worker('js/components/mosaic/worker.js');
+    create($img: HTMLImageElement) {
+        const $node = document.querySelector('#mosaic-box');
+        const width = $node.offsetWidth;
+        const ratio = $img.height / $img.width;
+        const w = new Worker('js/components/mosaic/worker.js');
 
         // photo width > window width => resize image
+        const img = $img;
         if (img.width > width) {
             img.width = width;
             img.height = Math.floor(width * ratio);
@@ -38,7 +31,7 @@ export default class Mosaic {
         // set dimension
         this.width = img.width;
         this.height = img.height;
-        this.numRow = this.height / this.TILE_HEIGHT;
+        this.numRow = this.height / config.TILE_HEIGHT;
         this.canvas.width = this.width;
         this.canvas.height = this.height;
 
@@ -47,10 +40,6 @@ export default class Mosaic {
         this.dataCtx = this.context.getImageData(0, 0, this.width, this.height).data;
         this.context.clearRect(0, 0, this.width, this.height);
 
-        /**
-         *
-         * @returns {{data: string, type: string}}
-         */
         function msgCloseWorker() {
             return {
                 data: '',
@@ -60,67 +49,56 @@ export default class Mosaic {
 
         w.postMessage({
             data: {
-                colNum: Math.floor(this.width / this.TILE_WIDTH),
-                rowNum: Math.floor(this.height / this.TILE_HEIGHT),
-                pixelNum: this.TILE_HEIGHT * this.width * 4,
+                colNum: Math.floor(this.width / config.TILE_WIDTH),
+                rowNum: Math.floor(this.height / config.TILE_HEIGHT),
+                pixelNum: config.TILE_HEIGHT * this.width * 4,
                 dataCtx: this.dataCtx,
-                TILE_HEIGHT: this.TILE_HEIGHT,
-                TILE_WIDTH: this.TILE_WIDTH,
+                TILE_HEIGHT: config.TILE_HEIGHT,
+                TILE_WIDTH: config.TILE_WIDTH,
             },
             type: 'MSG_START',
         });
 
-        w.onmessage = e => {
-            let eData = e.data,
-                data = eData.data,
-                type = eData.type;
+        w.onmessage = (e: *) => {
+            const { data, type } = e.data;
 
-            switch (type) {
-                case 'MSG_ERROR':
-                    this.postMessage(msgCloseWorker());
-                    break;
-                case 'MSG_COMPOSE_READY':
-                    this.data = data;
-                    this.render();
-                    break;
-                default:
-                    break;
+            if (type === 'MSG_COMPOSE_READY') {
+                this.data = data;
+                this.render();
+            } else {
+                this.postMessage(msgCloseWorker());
             }
         };
-        w.onerror = function(err) {
+        w.onerror = (err: string) => {
+            // eslint-disable-next-line no-console
             console.log(err);
             msgCloseWorker();
         };
     }
 
-    /**
-     * draw single tiles, put them in a hidden row and draw the result
-     */
-    render() {
-        let row = new MosaicRow(this.width, this.TILE_HEIGHT, this.URL_SERVER);
-        row.fetch(this.data[this.indexRow]);
-        Promise.all(row.row)
-            .then(tilesLoaded => {
-                if (this.indexRow < this.numRow - 1) {
-                    this.render(this.data[this.indexRow++]);
-                }
-                // console.time('draw');
-                row.draw(tilesLoaded, this.TILE_WIDTH);
-                // console.timeEnd('draw');
-                this.draw(row.canvas, this.indexRow * this.TILE_HEIGHT);
-                row.context.clearRect(0, 0, this.width, this.TILE_HEIGHT);
-            })
-            .catch(function(err) {
-                console.log(err);
-            });
+    draw(canvas: *) {
+        const startColumn = 0;
+        const startRow = this.indexRow * config.TILE_HEIGHT;
+
+        this.context.drawImage(canvas, startColumn, startRow);
     }
 
-    /**
-     * draw rows and display them
-     * @param canvas
-     * @param dy
-     */
-    draw(canvas, dy) {
-        this.context.drawImage(canvas, 0, dy);
+    render() {
+        const newRow = new MosaicRow(this.width);
+        newRow.fetch(this.data[this.indexRow]);
+
+        Promise.all(newRow.row)
+            .then((tilesLoaded: *) => {
+                if (this.indexRow < this.numRow - 1) {
+                    setTimeout(this.render(this.data[(this.indexRow += 1)]), 0);
+                }
+                newRow.draw(tilesLoaded);
+                this.draw(newRow.canvas);
+                newRow.context.clearRect(0, 0, this.width, config.TILE_HEIGHT);
+            })
+            .catch((err: string) => {
+                // eslint-disable-next-line no-console
+                console.log(err);
+            });
     }
 }
