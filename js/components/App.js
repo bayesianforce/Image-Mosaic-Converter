@@ -1,44 +1,29 @@
-/**
- * Created by Valerio Bartolini
- */
+// @flow
 import Mosaic from './mosaic/Mosaic';
+import * as data from '../config.json';
 
-export default class App {
-    constructor(options) {
-        this.options = options;
-    }
+const loadFile = (file: *) => {
+    const fileReader = () => {
+        return new Promise((resolve: Promise<*>) => {
+            const reader = new FileReader();
+            reader.onload = resolve;
+            reader.readAsDataURL(file);
+        });
+    };
 
-    /**
-     *
-     * @param img
-     */
-    start(img) {
-        img && img.width >= this.options.tile.WIDTH && img.height >= this.options.tile.HEIGHT
-            ? new Mosaic(this.options).create(img)
-            : console.log('wrong img dimension. width:' + img.width + ' and height: ' + img.height);
-    }
+    Promise.resolve()
+        .then(() => fileReader())
+        .then((e: Event<FileReader>) => {
+            const img: HTMLImageElement = new Image();
+            img.onload = () => {
+                if (img.width >= data.TILE_WIDTH && img.height >= data.TILE_HEIGHT) {
+                    new Mosaic().create(img);
+                }
+            };
 
-    /**
-     *
-     * @param file
-     */
-    loadFile(file) {
-        let fileReader = () => {
-            return new Promise(resolve => {
-                let reader = new FileReader();
-                reader.onload = resolve;
-                reader.readAsDataURL(file);
-            });
-        };
+            const fileRead = e.target;
+            img.src = fileRead.result;
+        });
+};
 
-        Promise.resolve()
-            .then(() => fileReader())
-            .then(e => {
-                const img = new Image();
-                img.onload = () => {
-                    this.start(img);
-                };
-                img.src = e.target.result;
-            });
-    }
-}
+export default loadFile;

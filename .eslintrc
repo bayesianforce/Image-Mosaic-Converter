@@ -1,78 +1,53 @@
 {
-  "parser": "babel-eslint",
-  "extends": [
-    "airbnb",
-    "plugin:jest/recommended",
-    "plugin:security/recommended"
-  ],
-  "env": {
-    "es6": true,
-    "node": true,
-    "browser": true,
-    "jest/globals": true,
-    "detox/detox": true,
-    "cypress/globals": true
-  },
-  "plugins": [
-    "flowtype",
-    "jest",
-    "detox",
-    "security",
-    "cypress"
-  ],
-  "rules": {
-    "indent": [2, 4],
-    "complexity": [2, 3],
-    "func-names": [2, "always"],
-    "max-len": [2, 120],
-    "no-alert": 2,
-    "no-console": 2,
-    "react/jsx-filename-extension": [0],
-    "react/jsx-indent": [2, 4],
-    "react/jsx-indent-props": [2, 4],
-    "react/no-danger": 2,
-    "jsx-a11y/anchor-is-valid": ["error", {
-      "components": ["Link"],
-      "specialLink": ["to"]
-    }],
-    "import/no-extraneous-dependencies": [2, {
-      "devDependencies": [
-        "jest.transform.js",
-        "__jest__/**",
-        "**/transform.js",
-        "**/dev.js",
-        "**/*.test.js",
-        "**/stories{.web,.ios,.android,.native,}.js",
-        "**/scripts/*.js"
-      ]
-    }],
-    "flowtype/define-flow-type": 1,
-    "flowtype/delimiter-dangle": [2, "always-multiline"],
-    "flowtype/boolean-style": [2, "boolean"],
-    "flowtype/generic-spacing": [2, "never"],
-    "flowtype/no-dupe-keys": 2,
-    "flowtype/no-primitive-constructor-types": 2,
-    "flowtype/no-types-missing-file-annotation": 2,
-    "flowtype/no-weak-types": 2,
-    "flowtype/object-type-delimiter": 2,
-    "flowtype/require-parameter-type": [2, {
-      "excludeArrowFunctions": "expressionsOnly"
-    }],
-    "flowtype/semi": 2,
-    "flowtype/space-after-type-colon": 2,
-    "flowtype/space-before-generic-bracket": 2,
-    "flowtype/space-before-type-colon": 2,
-    "flowtype/type-id-match": 2,
-    "flowtype/union-intersection-spacing": 2,
-    "flowtype/use-flow-type": 1,
-    "flowtype/require-valid-file-annotation": [2, "always"],
-    "security/detect-child-process": 0,
-    "security/detect-non-literal-fs-filename": 0,
-    "security/detect-non-literal-regexp": 0,
-    "security/detect-non-literal-require": 0,
-    "security/detect-object-injection": 0
-  },
-  "globals": {
-    "fetch": false
-  }
+    "parser": "babel-eslint",
+    "extends": ["airbnb-base", "prettier", "plugin:security/recommended"],
+    "env": {
+        "es6": true,
+        "node": true,
+        "browser": true
+    },
+    "plugins": ["prettier", "security", "flowtype"],
+    "rules": {
+        "indent": [2, 4],
+        "complexity": [2, 3],
+        "func-names": [2, "always"],
+        "max-len": [2, 120],
+        "no-alert": 2,
+        "no-console": 2,
+        "for-direction": 1,
+        "lines-between-class-members": 1,
+        "no-buffer-constructor":1,
+        "flowtype/define-flow-type": 1,
+        "flowtype/delimiter-dangle": [2, "always-multiline"],
+        "flowtype/boolean-style": [2, "boolean"],
+        "flowtype/generic-spacing": [2, "never"],
+        "flowtype/no-dupe-keys": 2,
+        "flowtype/no-primitive-constructor-types": 2,
+        "flowtype/no-types-missing-file-annotation": 2,
+        "flowtype/no-weak-types": 2,
+        "flowtype/object-type-delimiter": 2,
+        "flowtype/require-parameter-type": [
+            2,
+            {
+                "excludeArrowFunctions": "expressionsOnly"
+            }
+        ],
+        "flowtype/semi": 2,
+        "flowtype/space-after-type-colon": 2,
+        "flowtype/space-before-generic-bracket": 2,
+        "flowtype/space-before-type-colon": 2,
+        "flowtype/type-id-match": 2,
+        "flowtype/union-intersection-spacing": 2,
+        "flowtype/use-flow-type": 1,
+        "flowtype/require-valid-file-annotation": [2, "always"],
+        "security/detect-child-process": 0,
+        "security/detect-non-literal-fs-filename": 0,
+        "security/detect-non-literal-regexp": 0,
+        "security/detect-non-literal-require": 0,
+        "security/detect-object-injection": 0,
+        "prettier/prettier": ["error"]
+    },
+    "globals": {
+        "fetch": false
+    }
 }
