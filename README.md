@@ -25,5 +25,9 @@ The tile size should be configurable via the code constants in js/config.json.
 The default size is 10x10.
 
 ## Installation
+* yarn install
+
+## launch
 * yarn start
-* check the app on http://localhost:3000
+
+ check the app on http://localhost:3000
