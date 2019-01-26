@@ -11,7 +11,7 @@
         "typecheck": "flow check",
         "prettier": "prettier --check js/**/*.js",
         "test": "yarn typecheck && yarn lint && yarn prettier",
-        "start": "yarn build && yarn server"
+        "start": "yarn build"
     },
     "devDependencies": {
         "@babel/cli": "^7.2.3",
