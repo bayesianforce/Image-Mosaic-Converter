@@ -1,15 +1,18 @@
 // eslint-disable-next-line flowtype/require-valid-file-annotation
+const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const webpackMerge = require('webpack-merge');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+const baseDevConfig = {
     mode: 'development',
     devtool: 'source-map',
     entry: {
-        App: `${__dirname}/js/client.js`,
+        App: path.resolve(__dirname, 'src/index.js'),
     },
     externals: [],
     output: {
-        path: `${__dirname}/dist/scripts`,
+        path: path.resolve(__dirname, 'dist'),
         filename: 'PhotoMosaic.min.js',
     },
     module: {
@@ -34,6 +37,15 @@ module.exports = {
             }),
         ],
     },
-    plugins: [],
+    plugins: [new CopyWebpackPlugin([{ from: 'index.html', to: './' }])],
     watch: false,
 };
+const serviceWorkerConfig = webpackMerge.smart(baseDevConfig, {
+    entry: './src/worker.js',
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'worker.js',
+    },
+});
+
+module.exports = [serviceWorkerConfig, baseDevConfig];

@@ -1,6 +1,6 @@
 // @flow
 import loadImage from './components/App';
-import './App.css';
+import './index.css';
 
 window.onload = () => {
     const input = document.querySelector('#input');

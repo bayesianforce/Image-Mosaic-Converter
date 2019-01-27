@@ -10,18 +10,12 @@ html, body {
     color: #636d7a;
 }
 
-.toolbar .drag-area {
-    padding: 6px;
-    width: 80%;
-    border: 1px dashed #636d7a;
-    margin: 0 auto;
-}
-
 .toolbar .button {
     max-width: 100px;
     border: 1px solid #9E9E9E;
     color: #636d7a;
     padding: 2px;
+    margin: 5px;
     cursor: pointer;
     margin: 0 auto;
 }

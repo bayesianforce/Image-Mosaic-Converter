@@ -3,7 +3,7 @@ const http = require('http');
 const url = require('url');
 const path = require('path');
 const util = require('util');
-const config = require('./js/config.json');
+const config = require('./src/config.json');
 
 const port = process.env.PORT || 3000;
 
@@ -19,23 +19,22 @@ http.createServer((req, res) => {
     let m;
     if (pathname == '/') {
         res.writeHead(200, { 'Content-Type': 'text/html' });
-        fs.createReadStream(dir + '/index.html').pipe(res);
+        fs.createReadStream(dir + '/dist/index.html').pipe(res);
         return;
-    } else if ((m = pathname.match(/^\/js\//) || pathname.match(/^\/dist\/scripts\//))) {
-        const filename = dir + pathname;
+    } else if ((m = pathname.match(/^\/color\/([0-9a-fA-F]{6})/))) {
+        res.writeHead(200, { 'Content-Type': 'image/svg+xml' });
+        res.write(util.format(svgTemplate, config.TILE_WIDTH, config.TILE_HEIGHT, m[1]));
+        res.end();
+        return;
+    } else if ((m = pathname.match(/^\/js\//) || pathname.match(/^\//))) {
+        const filename = dir + '/dist/' + pathname;
         const stats = fs.existsSync(filename) && fs.statSync(filename);
         if (stats && stats.isFile()) {
             res.writeHead(200, { 'Content-Type': 'application/javascript' });
             fs.createReadStream(filename).pipe(res);
             return;
         }
-    } else if ((m = pathname.match(/^\/color\/([0-9a-fA-F]{6})/))) {
-        res.writeHead(200, { 'Content-Type': 'image/svg+xml' });
-        res.write(util.format(svgTemplate, config.TILE_WIDTH, config.TILE_HEIGHT, m[1]));
-        res.end();
-        return;
     }
-
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.write('404 Not Found\n');
     res.end();

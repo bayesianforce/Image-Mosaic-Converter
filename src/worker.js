@@ -1,7 +1,27 @@
-/* eslint-disable flowtype/require-valid-file-annotation */
-/* eslint-disable flowtype/require-parameter-type */
+// @flow
+/* eslint-disable no-restricted-globals */
+
+type OnMessageDataType = {
+    colNum: number,
+    rowNum: number,
+    pixelNum: number,
+    dataCtx: Uint8ClampedArray,
+    TILE_WIDTH: number,
+    TILE_HEIGHT: number,
+};
+
 class Tile {
-    constructor(TILE_WIDTH, TILE_HEIGHT) {
+    width: number;
+
+    height: number;
+
+    color: string;
+
+    pixels: Array<*>;
+
+    numPixels: number;
+
+    constructor(TILE_WIDTH: number, TILE_HEIGHT: number) {
         this.width = TILE_WIDTH;
         this.height = TILE_HEIGHT;
         this.color = '#000000';
@@ -15,7 +35,7 @@ class Tile {
      * @param ctxTile
      * @returns {Tile}
      */
-    setTile(col, ctxTile) {
+    setTile(col: number, ctxTile: Uint8ClampedArray) {
         const x = col * this.width;
         const numPixCol = this.width * 4;
         const startCol = x * 4;
@@ -51,22 +71,16 @@ class Tile {
                 }
             }
 
-            return tileSum.map(avgComponent => {
+            return tileSum.map((avgComponent: number) => {
                 return avgComponent / numPixels || 0;
             });
         }
 
-        function rgbToHex(tileAvg) {
-            /**
-             *
-             * @param index
-             * @returns {string}
-             */
-            function componentRgbToHex(index) {
+        function rgbToHex(tileAvg: Array<number>) {
+            const componentRgbToHex = (index: number) => {
                 const hex = tileAvg[index].toString(16);
                 return hex.length === 1 ? `0${hex}` : hex;
-            }
-
+            };
             return componentRgbToHex(0) + componentRgbToHex(1) + componentRgbToHex(2);
         }
 
@@ -75,7 +89,7 @@ class Tile {
     }
 }
 
-const start = data => {
+const start = (data: OnMessageDataType) => {
     let dataPixels = [];
     const tileRows = [];
     const heightTile = data.TILE_HEIGHT;
@@ -106,7 +120,6 @@ const start = data => {
 };
 
 const stop = () => {
-    // eslint-disable-next-line no-restricted-globals
     self.close();
     return { data: '', type: '' };
 };
@@ -116,18 +129,16 @@ const op = {
     MSG_STOP: stop,
 };
 
-// eslint-disable-next-line no-restricted-globals
-self.onmessage = e => {
+onmessage = (e: { data: any }) => {
     try {
         const { data, type } = e.data;
         if (data) {
-            this.postMessage(op[type].call(this, data));
+            self.postMessage(op[type].call(this, data));
         } else {
-            this.close();
+            self.close();
         }
     } catch (err) {
-        this.postMessage({ data: '', type: 'MSG_ERROR' });
+        self.postMessage({ data: '', type: 'MSG_ERROR' });
     }
 };
-/* eslint-enable flowtype/require-parameter-type */
-/* eslint-enable flowtype/require-valid-file-annotation */
+/* eslint-enable no-restricted-globals */
