@@ -1,20 +1,37 @@
 // @flow
-import loadFile from './components/App';
+import loadImage from './components/App';
 import './App.css';
 
 window.onload = () => {
     const input = document.querySelector('#input');
     const inputHide = document.querySelector('#inputHide');
-    const getImage = (e: *) => e.target.files[0] || e.dataTransfer.files[0];
+    const getImage = (target: HTMLInputElement) => {
+        const file = target.files[0];
 
-    input.addEventListener('click', (e: *) => {
-        e.stopPropagation();
-        inputHide.click();
-    });
+        if (file && file.type.match(/image.*/)) {
+            return file;
+        }
+        return null;
+    };
 
-    inputHide.addEventListener('change', (e: *) => {
-        e.stopPropagation();
-        const file = getImage(e);
-        return file && file.type.match(/image.*/) && loadFile(file);
-    });
+    if (input) {
+        input.addEventListener('click', (e: *) => {
+            e.stopPropagation();
+            if (inputHide) {
+                inputHide.click();
+            }
+        });
+    }
+
+    if (inputHide) {
+        inputHide.onchange = (e: Event) => {
+            const { target } = e;
+            if (target instanceof HTMLInputElement) {
+                const image = getImage(target);
+                if (image) {
+                    loadImage(image);
+                }
+            }
+        };
+    }
 };

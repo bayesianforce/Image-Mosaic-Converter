@@ -3,20 +3,36 @@ import MosaicRow from './MosaicRow';
 import * as config from '../../config.json';
 
 export default class Mosaic {
+    data: Array<Array<{}>>;
+
+    width: number;
+
+    height: number;
+
+    numRow: number;
+
+    indexRow: number;
+
+    canvas: HTMLElement | null;
+
+    context: CanvasRenderingContext2D;
+
+    dataCtx: ?Uint8ClampedArray;
+
     constructor() {
-        this.data = null;
+        this.data = [];
         this.width = 0;
         this.height = 0;
         this.numRow = 0;
         this.indexRow = 0;
-
         this.canvas = document.querySelector('#mosaic-area');
-        this.context = this.canvas.getContext('2d');
-        this.dataCtx = [];
+        if (this.canvas && this.canvas instanceof HTMLCanvasElement) {
+            this.context = this.canvas.getContext('2d');
+        }
+        this.dataCtx = null;
     }
 
-    create($img: HTMLImageElement) {
-        const $node = document.querySelector('#mosaic-box');
+    create($img: HTMLImageElement, $node: HTMLElement) {
         const width = $node.offsetWidth;
         const ratio = $img.height / $img.width;
         const w = new Worker('js/components/mosaic/worker.js');
@@ -59,10 +75,10 @@ export default class Mosaic {
             type: 'MSG_START',
         });
 
-        w.onmessage = (e: *) => {
+        w.onmessage = (e: MessageEvent) => {
             const { data, type } = e.data;
 
-            if (type === 'MSG_COMPOSE_READY') {
+            if (type === 'MSG_COMPOSE_READY' && data) {
                 this.data = data;
                 this.render();
             } else {

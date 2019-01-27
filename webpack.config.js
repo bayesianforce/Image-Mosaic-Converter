@@ -1,4 +1,4 @@
-// @flow
+// eslint-disable-next-line flowtype/require-valid-file-annotation
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {

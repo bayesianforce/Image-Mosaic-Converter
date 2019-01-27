@@ -2,28 +2,35 @@
 import Mosaic from './mosaic/Mosaic';
 import * as data from '../config.json';
 
-const loadFile = (file: *) => {
+const loadImage = (file: File) => {
     const fileReader = () => {
-        return new Promise((resolve: Promise<*>) => {
+        return new Promise((resolve: ProgressEvent => void) => {
             const reader = new FileReader();
             reader.onload = resolve;
             reader.readAsDataURL(file);
         });
     };
 
+    const isValidImage = img => img.width >= data.TILE_WIDTH && img.height >= data.TILE_HEIGHT;
+
     Promise.resolve()
         .then(() => fileReader())
-        .then((e: Event<FileReader>) => {
+        .then((e: ProgressEvent) => {
             const img: HTMLImageElement = new Image();
+
             img.onload = () => {
-                if (img.width >= data.TILE_WIDTH && img.height >= data.TILE_HEIGHT) {
-                    new Mosaic().create(img);
+                const $container = document.querySelector('#mosaic-box');
+                if ($container && isValidImage(img)) {
+                    new Mosaic().create(img, $container);
                 }
             };
 
             const fileRead = e.target;
-            img.src = fileRead.result;
+
+            if (fileRead instanceof FileReader && typeof fileRead.result === 'string') {
+                img.src = fileRead.result;
+            }
         });
 };
 
-export default loadFile;
+export default loadImage;

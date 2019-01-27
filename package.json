@@ -8,7 +8,7 @@
         "server": "node server.js",
         "dev": "concurrently \"yarn server\" \"yarn build --watch\"",
         "lint": "eslint . --cache",
-        "typecheck": "flow check",
+        "typecheck": "flow check | flow-result-checker",
         "prettier": "prettier --check js/**/*.js",
         "test": "yarn typecheck && yarn lint && yarn prettier",
         "start": "yarn build && yarn server"
@@ -31,6 +31,7 @@
         "eslint-plugin-prettier": "^3.0.1",
         "eslint-plugin-security": "^1.4.0",
         "flow-bin": "^0.91.0",
+        "flow-result-checker": "^1.1.0",
         "prettier": "1.16.1",
         "style-loader": "^0.23.1",
         "uglifyjs-webpack-plugin": "^2.1.1",
