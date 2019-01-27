@@ -41,7 +41,7 @@ export default class Mosaic {
     }
 
     create(img: HTMLImageElement) {
-        const w = new Worker('js/components/mosaic/worker.js');
+        const w = new Worker('worker.js');
         // set dimension
         this.numRow = img.height / config.TILE_HEIGHT;
         this.canvas.width = img.width;
