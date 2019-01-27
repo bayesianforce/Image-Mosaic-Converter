@@ -2,8 +2,16 @@
 import MosaicRow from './MosaicRow';
 import * as config from '../../config.json';
 
+type PostMessageDataType = {
+    colNum: number,
+    rowNum: number,
+    pixelNum: number,
+    dataCtx: ?Uint8ClampedArray,
+    TILE_WIDTH: number,
+    TILE_HEIGHT: number,
+};
 export default class Mosaic {
-    data: Array<Array<{}>>;
+    messageResponse: Array<Array<{}>>;
 
     width: number;
 
@@ -13,61 +21,49 @@ export default class Mosaic {
 
     indexRow: number;
 
-    canvas: HTMLElement | null;
+    canvas: HTMLCanvasElement;
 
     context: CanvasRenderingContext2D;
 
     dataCtx: ?Uint8ClampedArray;
 
-    constructor() {
-        this.data = [];
-        this.width = 0;
-        this.height = 0;
+    postMessage: (message: { data: PostMessageDataType | '', type: string }) => void;
+
+    constructor($canvas: HTMLCanvasElement) {
+        this.messageResponse = [];
         this.numRow = 0;
         this.indexRow = 0;
-        this.canvas = document.querySelector('#mosaic-area');
+        this.canvas = $canvas;
         if (this.canvas && this.canvas instanceof HTMLCanvasElement) {
             this.context = this.canvas.getContext('2d');
         }
         this.dataCtx = null;
     }
 
-    create($img: HTMLImageElement, $node: HTMLElement) {
-        const width = $node.offsetWidth;
-        const ratio = $img.height / $img.width;
+    create(img: HTMLImageElement) {
         const w = new Worker('js/components/mosaic/worker.js');
-
-        // photo width > window width => resize image
-        const img = $img;
-        if (img.width > width) {
-            img.width = width;
-            img.height = Math.floor(width * ratio);
-        }
-
         // set dimension
-        this.width = img.width;
-        this.height = img.height;
-        this.numRow = this.height / config.TILE_HEIGHT;
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+        this.numRow = img.height / config.TILE_HEIGHT;
+        this.canvas.width = img.width;
+        this.canvas.height = img.height;
 
         // get pixel info from image and clean the rect
-        this.context.drawImage(img, 0, 0, this.width, this.height);
-        this.dataCtx = this.context.getImageData(0, 0, this.width, this.height).data;
-        this.context.clearRect(0, 0, this.width, this.height);
+        this.context.drawImage(img, 0, 0, img.width, img.height);
+        this.dataCtx = this.context.getImageData(0, 0, img.width, img.height).data;
+        this.context.clearRect(0, 0, img.width, img.height);
 
-        function msgCloseWorker() {
+        const msgCloseWorker = () => {
             return {
                 data: '',
                 type: 'MSG_STOP',
             };
-        }
+        };
 
         w.postMessage({
             data: {
-                colNum: Math.floor(this.width / config.TILE_WIDTH),
-                rowNum: Math.floor(this.height / config.TILE_HEIGHT),
-                pixelNum: config.TILE_HEIGHT * this.width * 4,
+                colNum: Math.floor(img.width / config.TILE_WIDTH),
+                rowNum: Math.floor(img.height / config.TILE_HEIGHT),
+                pixelNum: config.TILE_HEIGHT * img.width * 4,
                 dataCtx: this.dataCtx,
                 TILE_HEIGHT: config.TILE_HEIGHT,
                 TILE_WIDTH: config.TILE_WIDTH,
@@ -75,24 +71,25 @@ export default class Mosaic {
             type: 'MSG_START',
         });
 
-        w.onmessage = (e: MessageEvent) => {
+        w.onmessage = (e: { data: any }) => {
             const { data, type } = e.data;
 
             if (type === 'MSG_COMPOSE_READY' && data) {
-                this.data = data;
+                this.messageResponse = data;
                 this.render();
             } else {
                 this.postMessage(msgCloseWorker());
             }
         };
-        w.onerror = (err: string) => {
+
+        w.onerror = (err: Event) => {
             // eslint-disable-next-line no-console
             console.log(err);
             msgCloseWorker();
         };
     }
 
-    draw(canvas: *) {
+    draw(canvas: HTMLCanvasElement) {
         const startColumn = 0;
         const startRow = this.indexRow * config.TILE_HEIGHT;
 
@@ -100,17 +97,18 @@ export default class Mosaic {
     }
 
     render() {
-        const newRow = new MosaicRow(this.width);
-        newRow.fetch(this.data[this.indexRow]);
+        const newRow = new MosaicRow(this.canvas.width);
+        newRow.fetch(this.messageResponse[this.indexRow]);
 
         Promise.all(newRow.row)
             .then((tilesLoaded: *) => {
                 if (this.indexRow < this.numRow - 1) {
-                    setTimeout(this.render(this.data[(this.indexRow += 1)]), 0);
+                    this.indexRow += 1;
+                    this.render();
                 }
                 newRow.draw(tilesLoaded);
                 this.draw(newRow.canvas);
-                newRow.context.clearRect(0, 0, this.width, config.TILE_HEIGHT);
+                newRow.context.clearRect(0, 0, this.canvas.width, config.TILE_HEIGHT);
             })
             .catch((err: string) => {
                 // eslint-disable-next-line no-console
