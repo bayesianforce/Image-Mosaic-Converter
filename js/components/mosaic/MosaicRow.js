@@ -2,6 +2,14 @@
 import * as config from '../../config.json';
 
 export default class MosaicRow {
+    row: Array<*>;
+
+    canvas: HTMLCanvasElement;
+
+    context: CanvasRenderingContext2D;
+
+    url: string;
+
     constructor(width: number) {
         this.row = [];
         this.canvas = document.createElement('canvas');
@@ -13,10 +21,10 @@ export default class MosaicRow {
 
     fetch(tiles: *) {
         for (let i = 0; i < tiles.length; i += 1) {
-            this.row[i] = new Promise((resolve: Promise<*>) => {
+            this.row[i] = new Promise((resolve: EventTarget => void) => {
                 const img = new Image();
-                img.onload = (e: *) => {
-                    resolve(e.target);
+                img.onload = ({ target }: Event) => {
+                    resolve(target);
                 };
                 img.src = this.url + tiles[i].color;
             });
