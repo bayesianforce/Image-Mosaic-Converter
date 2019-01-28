@@ -15,7 +15,7 @@ window.onload = () => {
     };
 
     if (input) {
-        input.addEventListener('click', (e: *) => {
+        input.addEventListener('click', (e: Event) => {
             e.stopPropagation();
             if (inputHide) {
                 inputHide.click();
@@ -25,7 +25,7 @@ window.onload = () => {
 
     if (inputHide) {
         inputHide.onchange = (e: Event) => {
-            const { target } = e;
+            const {target} = e;
             if (target instanceof HTMLInputElement) {
                 const image = getImage(target);
                 if (image) {

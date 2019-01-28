@@ -11,7 +11,7 @@ type PostMessageDataType = {
     TILE_HEIGHT: number,
 };
 export default class Mosaic {
-    messageResponse: Array<Array<{}>>;
+    messageResponse: Array<Array<{color: string}>>;
 
     width: number;
 
@@ -27,7 +27,10 @@ export default class Mosaic {
 
     dataCtx: ?Uint8ClampedArray;
 
-    postMessage: (message: { data: PostMessageDataType | '', type: string }) => void;
+    postMessage: (message: {
+        data: PostMessageDataType | '',
+        type: string,
+    }) => void;
 
     constructor($canvas: HTMLCanvasElement) {
         this.messageResponse = [];
@@ -49,7 +52,12 @@ export default class Mosaic {
 
         // get pixel info from image and clean the rect
         this.context.drawImage(img, 0, 0, img.width, img.height);
-        this.dataCtx = this.context.getImageData(0, 0, img.width, img.height).data;
+        this.dataCtx = this.context.getImageData(
+            0,
+            0,
+            img.width,
+            img.height,
+        ).data;
         this.context.clearRect(0, 0, img.width, img.height);
 
         const msgCloseWorker = () => {
@@ -71,8 +79,8 @@ export default class Mosaic {
             type: 'MSG_START',
         });
 
-        w.onmessage = (e: { data: any }) => {
-            const { data, type } = e.data;
+        w.onmessage = (e: {data: any}) => {
+            const {data, type} = e.data;
 
             if (type === 'MSG_COMPOSE_READY' && data) {
                 this.messageResponse = data;
@@ -101,14 +109,19 @@ export default class Mosaic {
         newRow.fetch(this.messageResponse[this.indexRow]);
 
         Promise.all(newRow.row)
-            .then((tilesLoaded: *) => {
+            .then((tilesLoaded: Array<HTMLImageElement>) => {
                 if (this.indexRow < this.numRow - 1) {
                     this.indexRow += 1;
                     this.render();
                 }
                 newRow.draw(tilesLoaded);
                 this.draw(newRow.canvas);
-                newRow.context.clearRect(0, 0, this.canvas.width, config.TILE_HEIGHT);
+                newRow.context.clearRect(
+                    0,
+                    0,
+                    this.canvas.width,
+                    config.TILE_HEIGHT,
+                );
             })
             .catch((err: string) => {
                 // eslint-disable-next-line no-console
