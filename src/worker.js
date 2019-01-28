@@ -17,7 +17,7 @@ class Tile {
 
     color: string;
 
-    pixels: Array<*>;
+    pixels: Array<Uint8ClampedArray>;
 
     numPixels: number;
 
@@ -54,7 +54,7 @@ class Tile {
      * @returns {Tile}
      */
     setAvgColor() {
-        const { pixels, numPixels } = this;
+        const {pixels, numPixels} = this;
 
         /**
          *
@@ -81,7 +81,11 @@ class Tile {
                 const hex = tileAvg[index].toString(16);
                 return hex.length === 1 ? `0${hex}` : hex;
             };
-            return componentRgbToHex(0) + componentRgbToHex(1) + componentRgbToHex(2);
+            return (
+                componentRgbToHex(0) +
+                componentRgbToHex(1) +
+                componentRgbToHex(2)
+            );
         }
 
         this.color = rgbToHex(getAvgColor());
@@ -97,7 +101,7 @@ const start = (data: OnMessageDataType) => {
     const numRow = data.rowNum;
     const numCol = data.colNum;
     const numPixels = data.pixelNum;
-    const { dataCtx } = data;
+    const {dataCtx} = data;
     let startPixel = 0;
     let endPixel = 0;
     let tile = null;
@@ -113,15 +117,15 @@ const start = (data: OnMessageDataType) => {
             // loop columns
             tile = new Tile(widthTile, heightTile);
             tile.setTile(col, dataPixels).setAvgColor();
-            tileRows[row].push({ color: tile.color });
+            tileRows[row].push({color: tile.color});
         }
     }
-    return { data: tileRows, type: 'MSG_COMPOSE_READY' };
+    return {data: tileRows, type: 'MSG_COMPOSE_READY'};
 };
 
 const stop = () => {
     self.close();
-    return { data: '', type: '' };
+    return {data: '', type: ''};
 };
 
 const op = {
@@ -129,16 +133,16 @@ const op = {
     MSG_STOP: stop,
 };
 
-onmessage = (e: { data: any }) => {
+onmessage = (e: {data: any}) => {
     try {
-        const { data, type } = e.data;
+        const {data, type} = e.data;
         if (data) {
             self.postMessage(op[type].call(this, data));
         } else {
             self.close();
         }
     } catch (err) {
-        self.postMessage({ data: '', type: 'MSG_ERROR' });
+        self.postMessage({data: '', type: 'MSG_ERROR'});
     }
 };
 /* eslint-enable no-restricted-globals */

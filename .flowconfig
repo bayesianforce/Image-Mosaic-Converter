@@ -1,8 +1,12 @@
-[include]
-./js
 [ignore]
-.*/node_modules/.*
+.*/node_modules/
+.*/dist/
+
+[include]
+
 [libs]
+
+[lints]
 
 [options]
 
