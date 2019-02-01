@@ -24,7 +24,7 @@ const baseDevConfig = {
             },
             {
                 test: /\.css$/,
-                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+                use: [{loader: 'style-loader'}, {loader: 'css-loader'}],
             },
         ],
     },
@@ -37,7 +37,7 @@ const baseDevConfig = {
             }),
         ],
     },
-    plugins: [new CopyWebpackPlugin([{ from: 'index.html', to: './' }])],
+    plugins: [new CopyWebpackPlugin([{from: 'index.html', to: './'}])],
     watch: false,
 };
 const serviceWorkerConfig = webpackMerge.smart(baseDevConfig, {

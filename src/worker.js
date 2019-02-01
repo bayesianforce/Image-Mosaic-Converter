@@ -10,6 +10,11 @@ type OnMessageDataType = {
     TILE_HEIGHT: number,
 };
 
+type PostMessageDataType = {
+    data: *,
+    type: string,
+};
+
 class Tile {
     width: number;
 
@@ -133,7 +138,7 @@ const op = {
     MSG_STOP: stop,
 };
 
-onmessage = (e: {data: any}) => {
+onmessage = (e: {data: PostMessageDataType}) => {
     try {
         const {data, type} = e.data;
         if (data) {
