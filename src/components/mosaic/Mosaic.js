@@ -10,6 +10,7 @@ type PostMessageDataType = {
     TILE_WIDTH: number,
     TILE_HEIGHT: number,
 };
+
 export default class Mosaic {
     messageResponse: Array<Array<{color: string}>>;
 
