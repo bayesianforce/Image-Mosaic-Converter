@@ -5,10 +5,8 @@
 <img height="80" width="80" alt="goat" src="https://raw.githubusercontent.com/kentcdodds/react-testing-library/master/other/goat.png" />
 </a>
 
-[![Build Status](https://travis-ci.org/mbasso/gccx.svg?branch=master)](https://travis-ci.org/mbasso/gccx)
-[![npm version](https://img.shields.io/npm/v/gccx.svg)](https://www.npmjs.com/package/gccx)
-[![npm downloads](https://img.shields.io/npm/dm/gccx.svg?maxAge=2592000)](https://www.npmjs.com/package/gccx)
-[![MIT](https://img.shields.io/npm/l/gccx.svg)](https://github.com/mbasso/gccx/blob/master/LICENSE.md)
+[![Build Status](https://travis-ci.org/bayesianforce/photomosaic-web_worker.svg?branch=master)](https://travis-ci.org/bayesianforce/photomosaic-web_worker)
+[![MIT](https://img.shields.io/npm/l/gccx.svg)](https://github.com/bayesianforce/photomosaic-web_worker/blob/master/README.md)
 
 <p>Simple filter to convert an Image in Mosaic using a dedicated worker to process high computational calculations.</p>
 
