@@ -1,18 +1,43 @@
 {
     "author": "Valerio Bartolini",
-    "name": "photo-mosaic",
-    "description": "Convert an image in svg tiles retrieved from the server using a dedicated worker",
+    "name": "photomosaic",
     "version": "1.0.0",
+    "description": "Photomosaic in javascript vanilla with web worker",
+    "license": "MIT",
     "scripts": {
-        "build": "webpack --config webpack.config.js",
         "server": "node server.js",
         "lint": "eslint . --cache",
-        "typecheck": "flow check | flow-result-checker",
-        "prettier": "prettier --check js/**/*.js",
-        "test": "yarn typecheck && yarn lint && yarn prettier",
-        "start:watch": "concurrently \"yarn server\" \"yarn build --watch\"",
-        "start": "yarn build && yarn server"
+        "flow": "flow check | flow-result-checker",
+        "prettier": "prettier --check src/**/*.js",
+        "format": "prettier --write \"**/*.{js,json,css,md}\" \"!package.json\"",
+        "build": "webpack --config webpack.config.js",
+        "check:src": "yarn lint && yarn flow && yarn prettier",
+        "start": "yarn build && yarn server",
+        "start:watch": "concurrently \"yarn server\" \"yarn build --watch\""
     },
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --staged"
+        }
+    },
+    "files": [
+        "dist",
+        "src"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bayesianforce/photomosaic-web_worker.git"
+    },
+    "keywords": [
+        "web-worker",
+        "javascript",
+        "canvas",
+        "ES6"
+    ],
+    "bugs": {
+        "url": "https://github.com/bayesianforce/photomosaic-web_worker/issues"
+    },
+    "homepage": "https://github.com/bayesianforce/photomosaic-web_worker",
     "devDependencies": {
         "@babel/cli": "^7.2.3",
         "@babel/core": "^7.2.2",
@@ -33,7 +58,9 @@
         "eslint-plugin-security": "^1.4.0",
         "flow-bin": "^0.91.0",
         "flow-result-checker": "^1.1.0",
+        "husky": "^1.3.1",
         "prettier": "1.16.1",
+        "pretty-quick": "^1.10.0",
         "style-loader": "^0.23.1",
         "uglifyjs-webpack-plugin": "^2.1.1",
         "webpack": "^4.29.0",

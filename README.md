@@ -16,13 +16,14 @@
 
 </div>
 
-
 <hr />
 
 [**Here a demo of photomosaic**](https://photomosaicool.herokuapp.com/)
 
 ## How it works
-----------------
+
+---
+
 Photomosaic turn an image to mosaic downloading SVG from server. You just need to load your image and wait for the result.
 A dedicated woker is used to avoid UI freeze.
 
@@ -30,9 +31,11 @@ The tile size should be configurable via the code constants in js/config.json.
 The default size is 10x10.
 
 ## Installation
-* yarn install
+
+-   yarn install
 
 ## launch
-* yarn start
 
- check the app on http://localhost:3000
+-   yarn start
+
+check the app on http://localhost:3000

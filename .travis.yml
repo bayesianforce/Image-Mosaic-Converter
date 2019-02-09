@@ -1,17 +1,15 @@
 language: node_js
 node_js:
-  - "5"
-  - "6"
-  - "7"
-  - "8"
-  - "9"
-  - "10"
+    - '8'
+    - '9'
+    - '10'
 script:
-  - npm run check:src
-  - npm run build
+    - yarn format
+    - yarn check:src
+    - yarn build
 branches:
-  only:
-    - master
+    only:
+        - master
 cache:
-  directories:
-  - $HOME/.npm
+    directories:
+        - $HOME/.npm

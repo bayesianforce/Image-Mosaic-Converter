@@ -1,18 +1,19 @@
-html, body {
+html,
+body {
     margin: 0;
-    padding:0;
+    padding: 0;
 }
 
 .container {
-    width:90%;
-    margin:0 auto;
+    width: 90%;
+    margin: 0 auto;
     text-align: center;
     color: #636d7a;
 }
 
 .toolbar .button {
     max-width: 100px;
-    border: 1px solid #9E9E9E;
+    border: 1px solid #9e9e9e;
     color: #636d7a;
     padding: 2px;
     margin: 5px;
@@ -21,8 +22,8 @@ html, body {
 }
 
 .toolbar .button:hover {
-    color: #FFFFFF;
-    background-color: #9E9E9E;
+    color: #ffffff;
+    background-color: #9e9e9e;
 }
 
 .mosaic-box {
