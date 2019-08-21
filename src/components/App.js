@@ -55,5 +55,4 @@ const loadImage = (file: File) => {
             }
         });
 };
-
 export default loadImage;
