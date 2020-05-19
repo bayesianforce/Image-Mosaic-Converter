@@ -4,14 +4,14 @@ import * as data from '../config.json';
 
 const loadImage = (file: File) => {
     const fileReader = () => {
-        return new Promise((resolve: ProgressEvent => void) => {
+        return new Promise((resolve: (ProgressEvent) => void) => {
             const reader = new FileReader();
             reader.onload = resolve;
             reader.readAsDataURL(file);
         });
     };
 
-    const isValidImageSize = img =>
+    const isValidImageSize = (img) =>
         img.width >= data.TILE_WIDTH && img.height >= data.TILE_HEIGHT;
     const resizeImage = ($img: HTMLImageElement, widthContainer: number) => {
         const $imgResized = $img;

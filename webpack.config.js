@@ -37,7 +37,9 @@ const baseDevConfig = {
             }),
         ],
     },
-    plugins: [new CopyWebpackPlugin([{from: 'index.html', to: './'}])],
+    plugins: [
+        new CopyWebpackPlugin({patterns: [{from: 'index.html', to: './'}]}),
+    ],
     watch: false,
 };
 const serviceWorkerConfig = webpackMerge.smart(baseDevConfig, {

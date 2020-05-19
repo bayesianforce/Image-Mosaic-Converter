@@ -21,7 +21,7 @@ export default class MosaicRow {
 
     fetch(tiles: Array<{color: string}>) {
         for (let i = 0; i < tiles.length; i += 1) {
-            this.row[i] = new Promise((resolve: EventTarget => void) => {
+            this.row[i] = new Promise((resolve: (EventTarget) => void) => {
                 const img = new Image();
                 img.onload = ({target}: Event) => {
                     resolve(target);
