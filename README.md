@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/bayesianforce/photomosaic-web_worker.svg?branch=master)](https://travis-ci.org/bayesianforce/photomosaic)
+[![Build Status](https://travis-ci.org/bayesianforce/photomosaic.svg?branch=master)](https://travis-ci.org/bayesianforce/photomosaic)
 [![MIT](https://img.shields.io/npm/l/gccx.svg)](https://github.com/bayesianforce/photomosaic/blob/master/README.md)
 
 <div align="center">
