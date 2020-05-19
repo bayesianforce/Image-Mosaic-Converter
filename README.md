@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/bayesianforce/photomosaic-web_worker.svg?branch=master)](https://travis-ci.org/bayesianforce/photomosaic-web_worker)
-[![MIT](https://img.shields.io/npm/l/gccx.svg)](https://github.com/bayesianforce/photomosaic-web_worker/blob/master/README.md)
+[![Build Status](https://travis-ci.org/bayesianforce/photomosaic-web_worker.svg?branch=master)](https://travis-ci.org/bayesianforce/photomosaic)
+[![MIT](https://img.shields.io/npm/l/gccx.svg)](https://github.com/bayesianforce/photomosaic/blob/master/README.md)
 
 <div align="center">
 <h1>Photomosaic Filter</h1>
@@ -30,10 +30,10 @@ The default size is 10x10.
 
 ## Installation
 
--   yarn install
+-   npm install
 
 ## launch
 
--   yarn start
+-   npm run start
 
 check the app on http://localhost:3000
